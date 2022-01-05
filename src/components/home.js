@@ -3,10 +3,11 @@ import React, {useEffect, useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Container, Row, Col, Card, InputGroup, FormControl } from 'react-bootstrap';
-import { ToastContainer } from "react-toastr";
+import {Container, Row, Col, Card, InputGroup, FormControl, Spinner } from 'react-bootstrap';
+//import { ToastContainer } from "react-toastr";
 
-let container;
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const config_auth = {
   auth: {
@@ -35,6 +36,7 @@ function Home() {
   })
 
   const [invoice, setIvoice] = useState({})
+  const notify = (msg) => toast(msg);
 
 
   async function get_token() {
@@ -56,8 +58,6 @@ function Home() {
       }
     }).then(res => {
 
-      console.log("Aqui es donde estoy probando")
-      console.log(res)
       setApiConfig([...api_config, res.data.data], [])
 
       return res
@@ -65,11 +65,11 @@ function Home() {
     }).catch(err => {return 'err: ' + err})
   
     if(respuesta == null){
-      return console.log('a ocurrido un Error')
+      return notify("a ocurrido un Error")
     }
   
     if(respuesta.data != null && !respuesta.data.success){
-      return console.log('Error en la Configuracion de la API')
+      return notify('Error en la Configuracion de la API')
     }
     
     respuesta.data.data.map(data => {
@@ -165,8 +165,7 @@ function Home() {
             ]});
           }
 
-          alert("El Numero de documento no se Encuentra asignado por favor intentar con 123456 o 123456789")
-
+          notify("El Numero de documento no se Encuentra asignado por favor intentar con 123456 o 123456789")
         }
 
       }
@@ -174,11 +173,8 @@ function Home() {
   }
 
   const handler_num_document = (event) => {
-    console.log(event.target.name)
-    console.log(token_global)
 
     setDocumentNum(event.target.value)
-
     console.log(document_num)
     //get_documents(event.target.value)
   }
@@ -188,7 +184,7 @@ function Home() {
 
     if(document_num == null || document_num == "" || document_num[0] == " " || document_num.length < 6) {
 
-      alert("El Campo es obligatorio y debe ser igual o mayor de 6 caracteres")
+      notify("El Campo es obligatorio y debe ser igual o mayor de 6 caracteres")
       return
     }
 
@@ -214,15 +210,35 @@ function Home() {
 
   }, [])
 
+  if (documents.key == null) {
+    return (
+      <div>
+        <Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true"/>
+        Loading...
+      </div>
+    )
+  }
+
+  console.log(documents)
+
   return (
     <Container fluid>
       <Row>
         <Col ></Col>
         <Col>
         <ToastContainer
-        ref={ref => container = ref}
-        className="toast-top-right"
-      />
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          />
+          {/* Same as */}
+        <ToastContainer />
           <Card >
             <Card.Body>
               <Card.Title className="mb-3">Ingrese sus Datos</Card.Title>
