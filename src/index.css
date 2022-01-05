@@ -5,6 +5,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  background-image: url("https://image.freepik.com/vector-gratis/fondo-cuadrados-modernos-estilo-empresarial-digital_1017-23833.jpg"); 
+
 }
 
 code {

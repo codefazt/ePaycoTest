@@ -1,5 +1,10 @@
 .App {
   text-align: center;
+  margin-top: 10%;
+}
+
+h1 {
+  color: #2271B3
 }
 
 .App-logo {
